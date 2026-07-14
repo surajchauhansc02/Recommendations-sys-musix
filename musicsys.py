@@ -75,15 +75,28 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 2. Mock Database generation (Simulating real tracks data)
+# 2. Mock Database with REAL Playable Audio Streams
 @st.cache_data
 def load_data():
     data = {
         'Song': ['Believer', 'Blinding Lights', 'Someone You Loved', 'Heat Waves', 'Perfect', 'Photograph', 'Memories', 'Thunder', 'Havana', 'Counting Stars'],
         'Artist': ['Imagine Dragons', 'The Weeknd', 'Lewis Capaldi', 'Glass Animals', 'Ed Sheeran', 'Ed Sheeran', 'Maroon 5', 'Imagine Dragons', 'Camila Cabello', 'OneRepublic'],
         'Album': ['Evolve', 'After Hours', 'Divinely Uninspired', 'Dreamland', '÷ (Deluxe)', 'x (Deluxe Edition)', 'JORDI (Deluxe)', 'Evolve', 'Camila', 'Native'],
-        'Duration': ['3:24', '3:20', '3:02', '3:58', '4:23', '4:19', '3:09', '3:07', '3:36', '4:17'],
-        'Genre': ['Indie Rock', 'Synthwave Pop', 'Pop Vocal', 'Indie Pop', 'Pop Romantic', 'Pop Acoustic', 'Pop Nostalgic', 'Indie Rock', 'Latin Pop', 'Pop Rock']
+        'Duration': ['0:46', '0:22', '0:35', '0:29', '0:41', '0:30', '0:33', '0:45', '0:38', '0:40'],
+        'Genre': ['Indie Rock', 'Synthwave Pop', 'Pop Vocal', 'Indie Pop', 'Pop Romantic', 'Pop Acoustic', 'Pop Nostalgic', 'Indie Rock', 'Latin Pop', 'Pop Rock'],
+        # These are live public direct-link MP3 resources for testing
+        'Audio_URL': [
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3'
+        ]
     }
     return pd.DataFrame(data)
 
@@ -91,7 +104,6 @@ df = load_data()
 
 # 3. Recommendation Engine Algorithm
 def get_recommendations(song_title, df):
-    # Combine feature vectors to find exact similarities
     df['features'] = df['Artist'] + " " + df['Genre']
     cv = CountVectorizer()
     count_matrix = cv.fit_transform(df['features'])
@@ -101,7 +113,6 @@ def get_recommendations(song_title, df):
         idx = df[df['Song'] == song_title].index[0]
         sim_scores = list(enumerate(cosine_sim[idx]))
         sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-        # Fetch top 4 recommendations excluding the current playing song
         song_indices = [i[0] for i in sim_scores if i[0] != idx][:4]
         return df.iloc[song_indices]
     except:
@@ -126,10 +137,10 @@ with st.sidebar:
     st.caption("😢 Sad Songs")
 
 # --- MAIN PAGE UI ---
-# Top Search Bar & Header
 col1, col2 = st.columns([4, 1])
 with col1:
-    search_query = st.selectbox("Search for songs, artists, albums...", df['Song'].tolist())
+    # This dropdown lets the user choose the active song they want to play
+    search_query = st.selectbox("Select a song to play & find recommendations:", df['Song'].tolist())
 with col2:
     st.markdown("🌐 **Suraj** ▾")
 
@@ -152,14 +163,17 @@ for idx, col in enumerate(mix_cols):
 
 st.write("---")
 
+# Fetch currently selected song's row
+selected_song_info = df[df['Song'] == search_query].iloc[0]
+
 # Recommended Table Section
 st.subheader("Recommended For You")
 recommended_df = get_recommendations(search_query, df)
 
-# Simulating Table Layout
 for index, row in recommended_df.iterrows():
     col_s, col_a, col_al, col_d = st.columns([3, 3, 3, 1])
     with col_s:
+        # Quick helper to switch playing song via selection helper
         st.markdown(f"▶️ **{row['Song']}**")
     with col_a:
         st.markdown(f"<span style='color:#b3b3b3'>{row['Artist']}</span>", unsafe_allow_html=True)
@@ -168,21 +182,19 @@ for index, row in recommended_df.iterrows():
     with col_d:
         st.markdown(f"⏱️ {row['Duration']}")
 
-# --- NOW PLAYING BOTTOM CONTROL BAR ---
-st.markdown("<br><br><br>", unsafe_allow_html=True)
+# --- NOW PLAYING BOTTOM CONTROL BAR (WITH ACTUAL PLAYABLE MUSIC) ---
+st.markdown("<br><br><br><br><br>", unsafe_allow_html=True)
 st.markdown(f"""
 <div class="player-bar">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
         <div>
-            <b style="color: #ffffff;">Now Playing: {search_query}</b><br>
-            <small style="color: #b3b3b3;">Streaming Source Activated</small>
-        </div>
-        <div style="color: #1DB954; font-size: 20px;">
-            ⏮️ ⏸️ ⏭️ 🔁
-        </div>
-        <div>
-            <small style="color: #b3b3b3;">🔊 █ █ █ █ ░ ░</small>
+            <b style="color: #ffffff;">Now Playing: {selected_song_info['Song']}</b><br>
+            <small style="color: #1DB954;">Artist: {selected_song_info['Artist']} | Genre: {selected_song_info['Genre']}</small>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+# Streamlit Audio Player (floating widget right under the now-playing bar info)
+st.write("💿 **Interactive Audio Player:**")
+st.audio(selected_song_info['Audio_URL'], format="audio/mp3", autoplay=True)
