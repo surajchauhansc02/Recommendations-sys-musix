@@ -142,9 +142,9 @@ with col1:
     # This dropdown lets the user choose the active song they want to play
     search_query = st.selectbox("Select a song to play & find recommendations:", df['Song'].tolist())
 with col2:
-    st.markdown("🌐 **Suraj** ▾")
+    st.markdown("🌐 **chhupe** ▾")
 
-st.header("Good Evening, Suraj")
+st.header("ke haal, Chhupe")
 
 # Made For You Grid Section
 st.subheader("Made for you")
