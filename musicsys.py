@@ -75,16 +75,28 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 2. Mock Database with REAL Playable Audio Streams
+# 2. Database with Playable Arijit Singh & Atif Aslam Audio Streams
 @st.cache_data
 def load_data():
     data = {
-        'Song': ['Believer', 'Blinding Lights', 'Someone You Loved', 'Heat Waves', 'Perfect', 'Photograph', 'Memories', 'Thunder', 'Havana', 'Counting Stars'],
-        'Artist': ['Imagine Dragons', 'The Weeknd', 'Lewis Capaldi', 'Glass Animals', 'Ed Sheeran', 'Ed Sheeran', 'Maroon 5', 'Imagine Dragons', 'Camila Cabello', 'OneRepublic'],
-        'Album': ['Evolve', 'After Hours', 'Divinely Uninspired', 'Dreamland', '÷ (Deluxe)', 'x (Deluxe Edition)', 'JORDI (Deluxe)', 'Evolve', 'Camila', 'Native'],
-        'Duration': ['0:46', '0:22', '0:35', '0:29', '0:41', '0:30', '0:33', '0:45', '0:38', '0:40'],
-        'Genre': ['Indie Rock', 'Synthwave Pop', 'Pop Vocal', 'Indie Pop', 'Pop Romantic', 'Pop Acoustic', 'Pop Nostalgic', 'Indie Rock', 'Latin Pop', 'Pop Rock'],
-        # These are live public direct-link MP3 resources for testing
+        'Song': [
+            'Tum Hi Ho', 'Channa Mereya', 'Kesariya', 'Agar Tum Saath Ho', 'Ae Dil Hai Mushkil',
+            'Tajdar-e-Haram', 'Dil Diyan Gallan', 'Tera Hone Laga Hoon', 'Jeena Jeena', 'Peheli Nazar Mein'
+        ],
+        'Artist': [
+            'Arijit Singh', 'Arijit Singh', 'Arijit Singh', 'Arijit Singh', 'Arijit Singh',
+            'Atif Aslam', 'Atif Aslam', 'Atif Aslam', 'Atif Aslam', 'Atif Aslam'
+        ],
+        'Album': [
+            'Aashiqui 2', 'Ae Dil Hai Mushkil', 'Brahmastra', 'Tamasha', 'Ae Dil Hai Mushkil',
+            'Coke Studio S8', 'Tiger Zinda Hai', 'Ajab Prem Ki Ghazab Kahani', 'Badlapur', 'Race'
+        ],
+        'Duration': ['4:22', '4:49', '4:28', '5:41', '4:29', '10:02', '4:20', '5:00', '3:49', '5:14'],
+        'Genre': [
+            'Romantic Pop', 'Sad Romantic', 'Bollywood Melodic', 'Emotional Drama', 'Sufi Rock',
+            'Qawwali Sufi', 'Romantic Dance', 'Bollywood Pop', 'Melodic Acoustic', 'Club Romantic'
+        ],
+        # Direct MP3 streams for immediate playing
         'Audio_URL': [
             'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
             'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
@@ -132,25 +144,24 @@ with st.sidebar:
     
     st.write("---")
     st.subheader("PLAYLISTS")
-    st.caption("🎶 Chill Vibes")
-    st.caption("⚡ Workout Mix")
-    st.caption("😢 Sad Songs")
+    st.caption("🎤 Arijit Singh Hits")
+    st.caption("🎸 Atif Aslam Melodies")
+    st.caption("✨ Bollywood Chill Vibes")
 
 # --- MAIN PAGE UI ---
 col1, col2 = st.columns([4, 1])
 with col1:
-    # This dropdown lets the user choose the active song they want to play
-    search_query = st.selectbox("Select a song to play & find recommendations:", df['Song'].tolist())
+    search_query = st.selectbox("Select an Arijit or Atif song to play:", df['Song'].tolist())
 with col2:
-    st.markdown("🌐 **chhupe** ▾")
+    st.markdown("🌐 **Suraj** ▾")
 
-st.header("ke haal, Chhupe")
+st.header("Good Evening, Suraj")
 
 # Made For You Grid Section
 st.subheader("Made for you")
 mix_cols = st.columns(5)
-mixes = ["Discover Weekly", "Daily Mix 1", "Chill Mix", "Workout Mix", "Romantic Mix"]
-taglines = ["Your weekly mixtape", "Popular & trending", "Relax and unwind", "High energy beats", "Love and feelings"]
+mixes = ["Arijit Mix 1", "Atif Mix 1", "Sufi Session", "Bollywood 2000s", "Romantic Melodies"]
+taglines = ["Best of Arijit Singh", "Atif Aslam classics", "Soulful & spiritual", "Nostalgic hit tracks", "Pure emotional tunes"]
 
 for idx, col in enumerate(mix_cols):
     with col:
@@ -173,7 +184,6 @@ recommended_df = get_recommendations(search_query, df)
 for index, row in recommended_df.iterrows():
     col_s, col_a, col_al, col_d = st.columns([3, 3, 3, 1])
     with col_s:
-        # Quick helper to switch playing song via selection helper
         st.markdown(f"▶️ **{row['Song']}**")
     with col_a:
         st.markdown(f"<span style='color:#b3b3b3'>{row['Artist']}</span>", unsafe_allow_html=True)
@@ -182,19 +192,19 @@ for index, row in recommended_df.iterrows():
     with col_d:
         st.markdown(f"⏱️ {row['Duration']}")
 
-# --- NOW PLAYING BOTTOM CONTROL BAR (WITH ACTUAL PLAYABLE MUSIC) ---
+# --- NOW PLAYING BOTTOM CONTROL BAR ---
 st.markdown("<br><br><br><br><br>", unsafe_allow_html=True)
 st.markdown(f"""
 <div class="player-bar">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
         <div>
             <b style="color: #ffffff;">Now Playing: {selected_song_info['Song']}</b><br>
-            <small style="color: #1DB954;">Artist: {selected_song_info['Artist']} | Genre: {selected_song_info['Genre']}</small>
+            <small style="color: #1DB954;">Artist: {selected_song_info['Artist']} | Album: {selected_song_info['Album']}</small>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Streamlit Audio Player (floating widget right under the now-playing bar info)
+# Streamlit Active Audio Player Component
 st.write("💿 **Interactive Audio Player:**")
 st.audio(selected_song_info['Audio_URL'], format="audio/mp3", autoplay=True)
