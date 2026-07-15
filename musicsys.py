@@ -62,13 +62,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 2. Database with Stable Streaming CDN Tracks
+# 2. Database with Real Working Music Links (YouTube Streams)
 @st.cache_data
 def load_data():
     data = {
         'Song': [
             'Tum Hi Ho', 'Channa Mereya', 'Kesariya', 'Agar Tum Saath Ho', 'Ae Dil Hai Mushkil',
-            'Tajdar-e-Haram', 'Dil Diyan Gallan', 'Tera Hone Laga Hoon', 'Jeena Jeena', 'Peheli Nazar Mein'
+            'Tajdar-e-Haram', 'Dil Diyan Gallan', 'Tera Hone Laga Hoon', 'Jeena Jeena', 'Pehli Nazar Mein'
         ],
         'Artist': [
             'Arijit Singh', 'Arijit Singh', 'Arijit Singh', 'Arijit Singh', 'Arijit Singh',
@@ -83,18 +83,18 @@ def load_data():
             'Romantic Pop', 'Sad Romantic', 'Bollywood Melodic', 'Emotional Drama', 'Sufi Rock',
             'Qawwali Sufi', 'Romantic Dance', 'Bollywood Pop', 'Melodic Acoustic', 'Club Romantic'
         ],
-        # Using bulletproof, open-access fallback audio feeds to bypass browser safety blocks
-        'Audio_URL': [
-            'https://actions.google.com/sounds/v1/ambiences/morning_birds.ogg',
-            'https://actions.google.com/sounds/v1/ambiences/coffee_shop_atmosphere.ogg',
-            'https://actions.google.com/sounds/v1/ambiences/outdoor_market_atmosphere.ogg',
-            'https://actions.google.com/sounds/v1/ambiences/rain_heavy_loud.ogg',
-            'https://actions.google.com/sounds/v1/water/sea_waves.ogg',
-            'https://actions.google.com/sounds/v1/ambiences/fire_crackle.ogg',
-            'https://actions.google.com/sounds/v1/ambiences/wind_howling.ogg',
-            'https://actions.google.com/sounds/v1/transportation/subway_train.ogg',
-            'https://actions.google.com/sounds/v1/sports/gymnasium.ogg',
-            'https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg'
+        # Safe, permanent video player integrations
+        'Video_URL': [
+            'https://www.youtube.com/watch?v=UNBkn68G9c4',  # Tum Hi Ho
+            'https://www.youtube.com/watch?v=284Ov7ysmfA',  # Channa Mereya
+            'https://www.youtube.com/watch?v=BddP6PYo2Gs',  # Kesariya
+            'https://www.youtube.com/watch?v=sK7riqg2mr4',  # Agar Tum Saath Ho
+            'https://www.youtube.com/watch?v=6FURuLYrR_Q',  # Ae Dil Hai Mushkil
+            'https://www.youtube.com/watch?v=a18py61_F_w',  # Tajdar-e-Haram
+            'https://www.youtube.com/watch?v=SAcpESN_Fk4',  # Dil Diyan Gallan
+            'https://www.youtube.com/watch?v=r6tV1z6YskA',  # Tera Hone Laga Hoon
+            'https://www.youtube.com/watch?v=zFdi8M1vZ80',  # Jeena Jeena
+            'https://www.youtube.com/watch?v=VzVLeL-Z-tY'   # Pehli Nazar Mein
         ]
     }
     return pd.DataFrame(data)
@@ -132,7 +132,7 @@ with st.sidebar:
 # --- MAIN PAGE UI ---
 col1, col2 = st.columns([4, 1])
 with col1:
-    search_query = st.selectbox("Select an Arijit or Atif song to play:", df['Song'].tolist())
+    search_query = st.selectbox("Select a song to play & update recommendations:", df['Song'].tolist())
 with col2:
     st.markdown("🌐 **Suraj** ▾")
 
@@ -174,7 +174,7 @@ for index, row in recommended_df.iterrows():
         st.markdown(f"⏱️ {row['Duration']}")
 
 # --- NOW PLAYING BOTTOM CONTROL BAR ---
-st.markdown("<br><br><br><br><br>", unsafe_allow_html=True)
+st.markdown("<br><br><br>", unsafe_allow_html=True)
 st.markdown(f"""
 <div class="player-bar">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
@@ -186,7 +186,6 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# Streamlit Active Audio Player Component
-st.write("🔊 **Streaming Stream Active:**")
-st.audio(selected_song_info['Audio_URL'], format="audio/ogg", autoplay=True)
-        
+# Streamlit Native Video Player Integration
+st.write("📺 **Media Streaming Console:**")
+st.video(selected_song_info['Video_URL'])
