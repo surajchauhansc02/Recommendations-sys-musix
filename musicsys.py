@@ -33,26 +33,31 @@ st.markdown("""
         border-radius: 8px;
         text-align: center;
     }
-    .player-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
+    .player-container {
         background-color: #181818;
-        border-top: 1px solid #282828;
-        padding: 15px;
-        z-index: 9999;
+        border: 1px solid #282828;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
     }
-    /* Style the HTML5 audio element globally */
-    audio {
-        width: 100%;
-        border-radius: 30px;
-        background: #282828;
+    .play-btn {
+        background-color: #1DB954;
+        color: white !important;
+        padding: 10px 20px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        margin-top: 10px;
+        transition: background-color 0.2s;
+    }
+    .play-btn:hover {
+        background-color: #1ed760;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 2. Database with Fully Open, Non-Restricted Audio Streams
+# 2. Database with Official Clean Stream Links
 @st.cache_data
 def load_data():
     data = {
@@ -73,25 +78,30 @@ def load_data():
             'Romantic Pop', 'Sad Romantic', 'Bollywood Melodic', 'Emotional Drama', 'Sufi Rock',
             'Qawwali Sufi', 'Romantic Dance', 'Bollywood Pop', 'Melodic Acoustic', 'Club Romantic'
         ],
-        # Safe public domain tracks used as stable endpoints to bypass API/platform cross-origin security
-        'Audio_URL': [
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3'
+        # YouTube Embedded IDs that bypass common browser security restrictions
+        'Embed_ID': [
+            'UNBkn68G9c4', '284Ov7ysmfA', 'BddP6PYo2Gs', 'sK7riqg2mr4', '6FURuLYrR_Q',
+            'a18py61_F_w', 'SAcpESN_Fk4', 'r6tV1z6YskA', 'zFdi8M1vZ80', 'VzVLeL-Z-tY'
+        ],
+        # Web Player fallback links
+        'Web_URL': [
+            'https://music.youtube.com/watch?v=UNBkn68G9c4',
+            'https://music.youtube.com/watch?v=284Ov7ysmfA',
+            'https://music.youtube.com/watch?v=BddP6PYo2Gs',
+            'https://music.youtube.com/watch?v=sK7riqg2mr4',
+            'https://music.youtube.com/watch?v=6FURuLYrR_Q',
+            'https://music.youtube.com/watch?v=a18py61_F_w',
+            'https://music.youtube.com/watch?v=SAcpESN_Fk4',
+            'https://music.youtube.com/watch?v=r6tV1z6YskA',
+            'https://music.youtube.com/watch?v=zFdi8M1vZ80',
+            'https://music.youtube.com/watch?v=VzVLeL-Z-tY'
         ]
     }
     return pd.DataFrame(data)
 
 df = load_data()
 
-# 3. Recommendation System logic
+# 3. Recommendation System Engine
 def get_recommendations(song_title, df):
     df['features'] = df['Artist'] + " " + df['Genre']
     cv = CountVectorizer()
@@ -117,7 +127,7 @@ with st.sidebar:
 # --- MAIN PAGE UI ---
 col1, col2 = st.columns([4, 1])
 with col1:
-    search_query = st.selectbox("Select a track to load:", df['Song'].tolist())
+    search_query = st.selectbox("Select a track to listen:", df['Song'].tolist())
 with col2:
     st.markdown("🌐 **Suraj** ▾")
 
@@ -134,7 +144,7 @@ st.write("---")
 
 selected_song_info = df[df['Song'] == search_query].iloc[0]
 
-# Recommendations Grid
+# Recommendations Section
 st.subheader("Recommended For You")
 recommended_df = get_recommendations(search_query, df)
 for index, row in recommended_df.iterrows():
@@ -143,17 +153,25 @@ for index, row in recommended_df.iterrows():
     with col_a: st.markdown(f"<span style='color:#b3b3b3'>{row['Artist']}</span>", unsafe_allow_html=True)
     with col_al: st.markdown(f"<span style='color:#b3b3b3'>{row['Duration']}</span>", unsafe_allow_html=True)
 
-# --- NATIVE EMBED PLAYER SYSTEM ---
-st.markdown("<br><br><br><br><br>", unsafe_allow_html=True)
+# --- MULTI-MODE SECURE MEDIA DECK ---
+st.write("---")
+st.subheader("🎵 Now Playing Console")
 
-# Directly leveraging HTML5 video components via st.components to completely bypass player walls
-player_html = f"""
-<div style="background-color: #181818; padding: 20px; border-radius: 12px; border: 1px solid #282828; font-family: sans-serif;">
-    <div style="margin-bottom: 12px;">
-        <span style="color: #ffffff; font-weight: bold; font-size: 16px;">Now Streaming: {selected_song_info['Song']}</span><br>
-        <span style="color: #1DB954; font-size: 13px;">{selected_song_info['Artist']} — {selected_song_info['Album']}</span>
-    </div>
-    <audio controls autoplay src="{selected_song_info['Audio_URL']}" style="width: 100%;"></audio>
-</div>
+# 1. Embedded HTML5 Iframe Player (Works directly inside the page without restriction blocks)
+embed_html = f"""
+<iframe width="100%" height="180" src="https://www.youtube.com/embed/{selected_song_info['Embed_ID']}?rel=0" 
+title="YouTube video player" frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+allowfullscreen style="border-radius:12px;"></iframe>
 """
-st.components.v1.html(player_html, height=150)
+st.components.v1.html(embed_html, height=200)
+
+# 2. Instant Launch Button if the local browser blocks iframes
+st.markdown(f"""
+<div class="player-container">
+    <h4>Having trouble with the player box above?</h4>
+    <p style="color:#b3b3b3; font-size:14px;">Some mobile browsers aggressively block inline players. Click the button below to stream the track perfectly on YouTube Music instantly.</p>
+    <a class="play-btn" href="{selected_song_info['Web_URL']}" target="_blank">🚀 Launch High-Quality Stream</a>
+</div>
+""", unsafe_allow_html=True)
+            
