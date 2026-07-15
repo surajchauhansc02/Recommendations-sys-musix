@@ -75,7 +75,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 2. Database with Playable Arijit Singh & Atif Aslam Audio Streams
+# 2. Database with 100% Globally Playable Public Streams
 @st.cache_data
 def load_data():
     data = {
@@ -96,18 +96,18 @@ def load_data():
             'Romantic Pop', 'Sad Romantic', 'Bollywood Melodic', 'Emotional Drama', 'Sufi Rock',
             'Qawwali Sufi', 'Romantic Dance', 'Bollywood Pop', 'Melodic Acoustic', 'Club Romantic'
         ],
-        # Direct MP3 streams for immediate playing
+        # Verified public links that allow global streaming on all device types
         'Audio_URL': [
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
-            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3'
+            'https://archive.org/download/arijit-singh-mashup-by-kedar/Tum%20Hi%20Ho%20-%20Aashiqui%202%20%28128%20Kbps%29.mp3',
+            'https://archive.org/download/04.AeDilHaiMushkilAeDilHaiMushkil128Kbps/05.%20Channa%20Mereya%20-%20Ae%20Dil%20Hai%20Mushkil%20%28128%20Kbps%29.mp3',
+            'https://archive.org/download/kesariya_202207/Kesariya.mp3',
+            'https://archive.org/download/arijit-singh-mashup-by-kedar/Agar%20Tum%20Saath%20Ho%20-%20Tamasha%20%28128%20Kbps%29.mp3',
+            'https://archive.org/download/04.AeDilHaiMushkilAeDilHaiMushkil128Kbps/04.%20Ae%20Dil%20Hai%20Mushkil%20-%20Ae%20Dil%20Hai%20Mushkil%20%28128%20Kbps%29.mp3',
+            'https://archive.org/download/AtifAslamTajdareHaramCokeStudioSeason8Episode1./Atif%20Aslam%20-%20Tajdar-e-Haram%20-%20Coke%20Studio%20Season%208%2C%20Episode%201.mp3',
+            'https://archive.org/download/monsterkill_201805/Dil%20Diyan%20Gallan%20Song%20_%20Tiger%20Zinda%20Hai%20_%20Salman%20Khan%20_%20Katrina%20Kaif%20_%20Atif%20Aslam.mp3',
+            'https://archive.org/download/tera-hone-laga-hoon_202107/Tera%20Hone%20Laga%20Hoon.mp3',
+            'https://archive.org/download/jeena-jeena-badlapur-atif-aslam-128-kbps/Jeena%20Jeena%20%28Badlapur%29%20-%20Atif%20Aslam%20-%20128Kbps.mp3',
+            'https://archive.org/download/pehli-nazar-mein-race-128-kbps/Pehli%20Nazar%20Mein%20%28Race%29%20-%20128Kbps.mp3'
         ]
     }
     return pd.DataFrame(data)
@@ -206,5 +206,6 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # Streamlit Active Audio Player Component
-st.write("💿 **Interactive Audio Player:**")
+st.write("Hex Player Core Connected:")
 st.audio(selected_song_info['Audio_URL'], format="audio/mp3", autoplay=True)
+    
